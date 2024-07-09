@@ -1,54 +1,78 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const { google } = require("googleapis");
 
+const credentials = {
+  type: "service_account",
+  project_id: process.env.project_id,
+  private_key_id: process.env.private_key_id,
+  private_key: process.env.private_key.replace(/\\n/g, "\n"),
+  client_email: process.env.client_email,
+  client_id: process.env.client_id,
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
+};
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-const auth = new google.auth.GoogleAuth({
-  keyFile: "", // Путь к JSON ключу
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-});
+const jwtClient = new google.auth.JWT(
+  credentials.client_email,
+  null,
+  credentials.private_key,
+  ["https://www.googleapis.com/auth/spreadsheets"]
+);
 
-const sheets = google.sheets({ version: "v4", auth });
+const spreadsheetId = "1QRg4jTuX3duOFIRhFayj6baiGt-qFTp4H50rjwEgYEA";
+const sheetName = "Sheet1";
 
-app.post("/submit_form", async (req, res) => {
+app.post("/submit_form", (req, res) => {
   const { mail, choice, checks, scale } = req.body;
 
-  console.log("Полученные данные из формы:", { mail, choice, checks, scale });
+  const formData = [mail, choice, checks.join(", "), scale];
 
-  try {
-    const spreadsheetId = ""; // ID таблицы (смотреть из командной строки в окне с таблицей)
+  jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.error("Error authorizing JWT", err);
+      res.status(500).send("Error authorizing JWT");
+      return;
+    }
 
-    const checksFormatted = Array.isArray(checks) ? checks.join(", ") : checks;
+    const sheets = google.sheets({ version: "v4", auth: jwtClient });
 
-    const values = [[mail, choice, checksFormatted, scale]];
-
-    const response = await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range: "Sheet1!A1:D1",
-      valueInputOption: "RAW",
-      requestBody: {
-        values,
+    sheets.spreadsheets.values.append(
+      {
+        spreadsheetId: spreadsheetId,
+        range: `${sheetName}!A:D`,
+        valueInputOption: "RAW",
+        resource: {
+          values: [formData],
+        },
       },
-    });
+      (err, result) => {
+        if (err) {
+          console.error("Error appending data to sheet", err);
+          res.status(500).send("Error appending data to sheet");
+          return;
+        }
 
-    console.log(
-      "Данные успешно добавлены в таблицу Google Sheets:",
-      response.data
+        console.log(
+          "Data successfully appended to sheet:",
+          result.data.updates
+        );
+        res.send("Form data successfully submitted");
+      }
     );
-    res.send("Данные успешно отправлены в Google Таблицы!");
-  } catch (err) {
-    console.error("Ошибка при отправке данных в Google Таблицы:", err);
-    res
-      .status(500)
-      .send("Произошла ошибка при отправке данных в Google Таблицы.");
-  }
+  });
 });
 
-// Запуск сервера
 app.listen(port, () => {
-  console.log(`Сервер запущен на http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}/`);
 });
