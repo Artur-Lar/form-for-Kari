@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Убираем стандартные отступы */
+    height: 100vh; /* Задаем высоту тела документа равной высоте окна просмотра */
+    display: flex; /* Используем Flexbox для центрирования */
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: center; /* Центрирование по горизонтали */
+    background-image: url('https://catherineasquithgallery.com/uploads/posts/2021-02/1612256501_125-p-prozrachnii-fioletovii-fon-155.png'); /* Добавляем фоновое изображение */
+    background-repeat: no-repeat; /* Запрещаем повторение изображения */
+    background-position: center; /* Центрируем изображение */
+    background-size: cover; /* Масштабируем изображение так, чтобы оно покрывало весь фон */
+}
+
+.container {
+    text-align: center; /* Центрирование текста внутри контейнера */
+}
+
+.kariform {
+    width: 100%; /* Установка ширины контейнера равной ширине окна просмотра */
+    display: flex;
+    flex-direction: column; /* Столбцовый порядок элементов */
+    align-items: center; /* Центрирование по горизонтали */
+}
+
+.form {
+    width: 100%;
+    margin: auto;
+}
+
+.label, input[type="text"], input[type="range"] {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#logo {
+    position: absolute; /* Позиционирование абсолютно относительно ближайшего позиционированного предка */
+    top: 10px; /* Расстояние от верхнего края страницы */
+    left: 10px; /* Расстояние от левого края страницы */
+    width: 150px; /* Ширина логотипа */
+    height: auto; /* Автоматическая высота для сохранения пропорций изображения */
+}
+
+.footer-bar {
+    position: fixed; /* Позиционирование плашки внизу экрана */
+    bottom: 0; /* Относительное позиционирование от нижнего края */
+    left: 0; /* Относительное позиционирование от левого края */
+    right: 0; /* Относительное позиционирование от правого края */
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+    color: white; /* Белый текст */
+    display: flex; /* Использование Flexbox для выравнивания содержимого */
+    justify-content: center; /* Центрирование содержимого по горизонтали */
+    align-items: center; /* Центрирование содержимого по вертикали */
+    opacity: 0,3; /* Скрытие плашки по умолчанию */
+    transition: opacity 0.3s ease-in-out; /* Анимация изменения прозрачности */
+    z-index: 2;
+}
+
+.content:hover .footer-bar {
+    opacity: 1; /* Отображение плашки при наведении */
+
+}

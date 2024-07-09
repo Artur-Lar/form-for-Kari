@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Форма Сбора Данных</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Подключение CSS -->
+  </head>
+  <body>
+    <div class="kariform content">
+      <img
+        src="https://cdn.api.kari.com/www/16697308190d27788b7515d042b6e152581d7ea994.svg"
+        alt="Логотип"
+        id="logo"
+      />
+      <h2>Форма Сбора Данных</h2>
+
+      <form
+        id="surveyForm"
+        action="http://localhost:3000/submit_form"
+        method="post"
+      >
+        <label for="name">Введите свою почту:</label><br />
+        <input type="text" id="mail" name="mail" /><br />
+
+        <p>Выберите один вариант:</p>
+        <input type="radio" id="option1" name="choice" value="Вариант 1" />
+        <label for="option1">Вариант 1</label><br />
+        <input type="radio" id="option2" name="choice" value="Вариант 2" />
+        <label for="option2">Вариант 2</label><br />
+
+        <p>Выберите несколько вариантов:</p>
+        <input type="checkbox" id="check1" name="checks" value=" Пункт 1" />
+        <label for="check1">Пункт 1</label><br />
+        <input type="checkbox" id="check2" name="checks" value="Пункт 2" />
+        <label for="check2">Пункт 2</label><br />
+
+        <p>Шкала от 1 до 10:</p>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          value="5"
+          class="slider"
+          id="scale"
+          name="scale"
+        />
+        <span id="scaleValue">5</span>
+        <!-- Элемент для отображения значения шкалы -->
+        <br />
+
+        <input type="submit" value="Отправить" />
+      </form>
+    </div>
+    <div class="footer-bar">
+      <div class="content">
+        <p>© kari. Все права защищены. 2024</p>
+        <a href="https://kari.com/page/policy"
+          >Политика обработки персональных данных</a
+        >
+        <p>
+          ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "КАРИ", ИНН 7702764909, ОГРН
+          1117746491500
+        </p>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("scale").oninput = function () {
+        document.getElementById("scaleValue").textContent = this.value;
+      };
+    </script>
+  </body>
+</html>
