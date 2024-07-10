@@ -26,13 +26,14 @@ const spreadsheetId = "1QRg4jTuX3duOFIRhFayj6baiGt-qFTp4H50rjwEgYEA";
 const sheetName = "Sheet1";
 
 exports.handler = async (event, context) => {
-  const { mail, choice, checks, scale } = JSON.parse(event.body);
-
-  const checksArray = Array.isArray(checks) ? checks : [checks];
-
-  const formData = [mail, choice, checksArray.join(", "), scale];
-
   try {
+    const { mail, choice, checks, scale } = JSON.parse(event.body);
+
+    // Преобразуем `checks` в массив, если он не является массивом
+    const checksArray = Array.isArray(checks) ? checks : [checks];
+
+    const formData = [mail, choice, checksArray.join(", "), scale];
+
     await jwtClient.authorize();
     const sheets = google.sheets({ version: "v4", auth: jwtClient });
 
