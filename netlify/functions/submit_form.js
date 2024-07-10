@@ -53,6 +53,7 @@ exports.handler = async (event, context) => {
     };
   } catch (err) {
     console.error("Error appending data to sheet", err);
+    console.log(process.env.project_id);
     return {
       statusCode: 500,
       body: "Error appending data to sheet",
