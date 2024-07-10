@@ -26,6 +26,12 @@ const spreadsheetId = "1QRg4jTuX3duOFIRhFayj6baiGt-qFTp4H50rjwEgYEA";
 const sheetName = "Sheet1";
 
 exports.handler = async (event, context) => {
+  console.log("project_id:", process.env.project_id);
+  console.log("private_key_id:", process.env.private_key_id);
+  console.log("client_email:", process.env.client_email);
+  console.log("client_id:", process.env.client_id);
+  console.log("client_x509_cert_url:", process.env.client_x509_cert_url);
+
   try {
     const { mail, choice, checks, scale } = JSON.parse(event.body);
 
@@ -52,11 +58,10 @@ exports.handler = async (event, context) => {
       body: "Form data successfully submitted",
     };
   } catch (err) {
-    console.error("ОШибка: Error appending data to sheet", err);
-    console.log("key data:", process.env.project_id);
+    console.error("Error appending data to sheet", err);
     return {
       statusCode: 500,
-      body: "Error appending data to sheet",
+      body: "Error appending data to sheet: `Error: ${err.message}`",
     };
   }
 };
