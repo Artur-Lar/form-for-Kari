@@ -58,10 +58,10 @@ exports.handler = async (event, context) => {
       body: "Form data successfully submitted",
     };
   } catch (err) {
-    console.error("Error appending data to sheet", err);
+    console.error("Error:", err);
     return {
       statusCode: 500,
-      body: "Error appending data to sheet: `Error: ${err.message}`",
+      body: `Error: ${err.message}`,
     };
   }
 };
