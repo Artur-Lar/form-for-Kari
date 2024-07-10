@@ -1,5 +1,5 @@
 // netlify/functions/submit_form.js
-
+require("dotenv").config();
 const { google } = require("googleapis");
 
 const credentials = {
