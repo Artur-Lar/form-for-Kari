@@ -1,0 +1,9 @@
+[build]
+  command = "npm install"
+  functions = "netlify/functions"
+  publish = "test-kari-v.1.2"
+
+[[redirects]]
+  from = "/submit_form"
+  to = "/.netlify/functions/submit_form"
+  status = 200
