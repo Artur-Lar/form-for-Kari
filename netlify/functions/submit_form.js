@@ -1,12 +1,15 @@
 // netlify/functions/submit_form.js
-require("dotenv").config();
+
 const { google } = require("googleapis");
+const querystring = require("querystring");
 
 const credentials = {
   type: "service_account",
   project_id: process.env.project_id,
   private_key_id: process.env.private_key_id,
-  private_key: process.env.private_key.replace(/\\n/g, "\n"),
+  private_key: process.env.private_key
+    ? process.env.private_key.replace(/\\n/g, "\n")
+    : null,
   client_email: process.env.client_email,
   client_id: process.env.client_id,
   auth_uri: "https://accounts.google.com/o/oauth2/auth",
@@ -29,13 +32,19 @@ exports.handler = async (event, context) => {
   try {
     console.log("Event body:", event.body);
 
-    const parsedBody = JSON.parse(event.body);
+    // Разбираем event.body как query string
+    const parsedBody = querystring.parse(event.body);
+
     console.log("Parsed body:", parsedBody);
 
     const { mail, choice, checks, scale } = parsedBody;
 
     if (!mail || !choice || !scale) {
-      throw new Error("Missing required fields");
+      console.error("Missing required fields:", { mail, choice, scale });
+      return {
+        statusCode: 400,
+        body: "Missing required fields",
+      };
     }
 
     const checksArray = Array.isArray(checks) ? checks : [checks];
