@@ -36,7 +36,9 @@ const sheetName = "Sheet1";
 app.post("/submit_form", (req, res) => {
   const { mail, choice, checks, scale } = req.body;
 
-  const formData = [mail, choice, checks.join(", "), scale];
+  const checksArray = Array.isArray(checks) ? checks : [checks];
+
+  const formData = [mail, choice, checksArray.join(", "), scale];
 
   jwtClient.authorize((err, tokens) => {
     if (err) {
